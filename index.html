@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#121812">
+  <title>像素贪吃蛇</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="game-header">
+      <div>
+        <p class="eyebrow">CLASSIC ARCADE</p>
+        <h1>贪吃蛇</h1>
+      </div>
+      <button id="soundButton" class="icon-button" type="button" aria-label="关闭音效" title="切换音效">♪</button>
+    </header>
+
+    <section class="scoreboard" aria-label="计分板">
+      <div class="score-item">
+        <span>当前得分</span>
+        <strong id="score">000</strong>
+      </div>
+      <div class="score-divider" aria-hidden="true"></div>
+      <div class="score-item">
+        <span>最高记录</span>
+        <strong id="bestScore">000</strong>
+      </div>
+    </section>
+
+    <section class="board-wrap">
+      <canvas id="gameCanvas" width="480" height="480" aria-label="贪吃蛇游戏区域"></canvas>
+      <div id="gameOverlay" class="overlay">
+        <div class="overlay-card">
+          <p id="overlayKicker">准备好了吗？</p>
+          <h2 id="overlayTitle">开始游戏</h2>
+          <p id="overlayText">吃掉果实，别撞到墙壁或自己。</p>
+          <button id="startButton" class="primary-button" type="button">开始</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button id="pauseButton" class="secondary-button" type="button" disabled>暂停</button>
+      <button id="restartButton" class="secondary-button" type="button">重新开始</button>
+    </div>
+
+    <section class="controls" aria-label="触控方向键">
+      <button class="control up" data-direction="up" type="button" aria-label="向上">↑</button>
+      <button class="control left" data-direction="left" type="button" aria-label="向左">←</button>
+      <button class="control down" data-direction="down" type="button" aria-label="向下">↓</button>
+      <button class="control right" data-direction="right" type="button" aria-label="向右">→</button>
+    </section>
+
+    <p class="hint"><kbd>方向键</kbd> / <kbd>WASD</kbd> 移动 · <kbd>空格</kbd> 暂停</p>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
