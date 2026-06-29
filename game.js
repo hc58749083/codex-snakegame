@@ -72,7 +72,11 @@ function getScoreHistory() {
 function saveScoreResult() {
   scoreHistory.unshift({ score, difficulty, playedAt: Date.now() });
   scoreHistory = scoreHistory.slice(0, SCORE_HISTORY_LIMIT);
-  localStorage.setItem(SCORE_HISTORY_KEY, JSON.stringify(scoreHistory));
+  try {
+    localStorage.setItem(SCORE_HISTORY_KEY, JSON.stringify(scoreHistory));
+  } catch {
+    // History is non-critical; keep game-over handling running if storage fails.
+  }
   renderScoreHistory();
 }
 
