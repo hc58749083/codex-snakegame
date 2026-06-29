@@ -12,6 +12,8 @@ const startButton = document.querySelector("#startButton");
 const pauseButton = document.querySelector("#pauseButton");
 const restartButton = document.querySelector("#restartButton");
 const soundButton = document.querySelector("#soundButton");
+const historyList = document.querySelector("#historyList");
+const historyEmpty = document.querySelector("#historyEmpty");
 const difficultyButtons = document.querySelectorAll("[data-difficulty]");
 
 const GRID_SIZE = 20;
@@ -21,6 +23,8 @@ const DIFFICULTIES = {
   normal: { label: "普通", initialSpeed: 150, minSpeed: 70, speedStep: 10 },
   hard: { label: "困难", initialSpeed: 105, minSpeed: 50, speedStep: 10 },
 };
+const SCORE_HISTORY_KEY = "snake-score-history";
+const SCORE_HISTORY_LIMIT = 10;
 const DIRECTIONS = {
   up: { x: 0, y: -1 },
   down: { x: 0, y: 1 },
@@ -39,11 +43,64 @@ let soundEnabled = true;
 let audioContext = null;
 let bestScore = Number(localStorage.getItem("snake-best-score")) || 0;
 let difficulty = localStorage.getItem("snake-difficulty");
+let scoreHistory = getScoreHistory();
 
 if (!DIFFICULTIES[difficulty]) difficulty = "normal";
 
 function formatScore(value) {
   return String(value).padStart(3, "0");
+}
+
+function getScoreHistory() {
+  try {
+    const savedHistory = JSON.parse(localStorage.getItem(SCORE_HISTORY_KEY) || "[]");
+    if (!Array.isArray(savedHistory)) return [];
+
+    return savedHistory
+      .filter((result) => (
+        result
+        && Number.isFinite(result.score)
+        && DIFFICULTIES[result.difficulty]
+        && Number.isFinite(result.playedAt)
+      ))
+      .slice(0, SCORE_HISTORY_LIMIT);
+  } catch {
+    return [];
+  }
+}
+
+function saveScoreResult() {
+  scoreHistory.unshift({ score, difficulty, playedAt: Date.now() });
+  scoreHistory = scoreHistory.slice(0, SCORE_HISTORY_LIMIT);
+  localStorage.setItem(SCORE_HISTORY_KEY, JSON.stringify(scoreHistory));
+  renderScoreHistory();
+}
+
+function renderScoreHistory() {
+  historyList.replaceChildren();
+  historyEmpty.hidden = scoreHistory.length > 0;
+
+  scoreHistory.forEach((result, index) => {
+    const item = document.createElement("li");
+    const rank = document.createElement("span");
+    const details = document.createElement("span");
+    const value = document.createElement("strong");
+    const playedAt = new Date(result.playedAt);
+
+    rank.className = "history-index";
+    rank.textContent = String(index + 1).padStart(2, "0");
+    details.className = "history-details";
+    details.textContent = `${DIFFICULTIES[result.difficulty].label} · ${playedAt.toLocaleString("zh-CN", {
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
+    value.textContent = formatScore(result.score);
+
+    item.append(rank, details, value);
+    historyList.append(item);
+  });
 }
 
 function resetGame() {
@@ -164,6 +221,7 @@ function endGame() {
   clearTimeout(timer);
   pauseButton.disabled = true;
   playTone(150, 0.2);
+  saveScoreResult();
 
   if (score > bestScore) {
     bestScore = score;
@@ -356,4 +414,5 @@ soundButton.addEventListener("click", () => {
 bestScoreElement.textContent = formatScore(bestScore);
 updateSoundButton();
 updateDifficultyButtons();
+renderScoreHistory();
 resetGame();

@@ -61,6 +61,15 @@
       <button id="restartButton" class="secondary-button" type="button">重新开始</button>
     </div>
 
+    <section class="score-history" aria-labelledby="historyTitle">
+      <div class="history-header">
+        <h2 id="historyTitle">最近成绩</h2>
+        <span>最多保存 10 次</span>
+      </div>
+      <ol id="historyList" class="history-list"></ol>
+      <p id="historyEmpty" class="history-empty">还没有历史成绩，完成一局后会显示在这里。</p>
+    </section>
+
     <section class="controls" aria-label="触控方向键">
       <button class="control up" data-direction="up" type="button" aria-label="向上">↑</button>
       <button class="control left" data-direction="left" type="button" aria-label="向左">←</button>
