@@ -295,6 +295,14 @@ function roundRect(x, y, width, height, radius) {
   ctx.roundRect(x, y, width, height, radius);
 }
 
+function updateSoundButton() {
+  const label = soundEnabled ? "关闭音效" : "开启音效";
+  soundButton.classList.toggle("muted", !soundEnabled);
+  soundButton.textContent = soundEnabled ? "🔊" : "🔇";
+  soundButton.setAttribute("aria-label", label);
+  soundButton.title = label;
+}
+
 function playTone(frequency, duration) {
   if (!soundEnabled) return;
   audioContext ??= new (window.AudioContext || window.webkitAudioContext)();
@@ -342,11 +350,10 @@ restartButton.addEventListener("click", () => {
 });
 soundButton.addEventListener("click", () => {
   soundEnabled = !soundEnabled;
-  soundButton.classList.toggle("muted", !soundEnabled);
-  soundButton.textContent = soundEnabled ? "♪" : "×";
-  soundButton.setAttribute("aria-label", soundEnabled ? "关闭音效" : "开启音效");
+  updateSoundButton();
 });
 
 bestScoreElement.textContent = formatScore(bestScore);
+updateSoundButton();
 updateDifficultyButtons();
 resetGame();
