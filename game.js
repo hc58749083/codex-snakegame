@@ -206,7 +206,7 @@ function showOverlay(kicker, title, text, buttonText) {
 }
 
 function draw() {
-  ctx.fillStyle = "#0f150f";
+  ctx.fillStyle = "#091626";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawGrid();
   drawFood();
@@ -214,7 +214,7 @@ function draw() {
 }
 
 function drawGrid() {
-  ctx.strokeStyle = "rgba(182, 242, 93, 0.045)";
+  ctx.strokeStyle = "rgba(88, 166, 255, 0.06)";
   ctx.lineWidth = 1;
   for (let i = 1; i < GRID_SIZE; i += 1) {
     const position = i * CELL_SIZE;
@@ -231,7 +231,7 @@ function drawGrid() {
 
 function drawSnakePart(part, index) {
   const padding = 2;
-  ctx.fillStyle = index === 0 ? "#d1ff86" : `hsl(${88 - Math.min(index, 20)}, 72%, ${58 - Math.min(index, 12)}%)`;
+  ctx.fillStyle = index === 0 ? "#8fc7ff" : `hsl(${211 + Math.min(index, 16)}, 78%, ${64 - Math.min(index, 12)}%)`;
   roundRect(
     part.x * CELL_SIZE + padding,
     part.y * CELL_SIZE + padding,
@@ -264,7 +264,7 @@ function drawEyes(head) {
     ];
   }
 
-  ctx.fillStyle = "#17220f";
+  ctx.fillStyle = "#0b2745";
   eyes.forEach((eye) => {
     ctx.beginPath();
     ctx.arc(baseX + eye.x, baseY + eye.y, 2, 0, Math.PI * 2);
@@ -282,7 +282,7 @@ function drawFood() {
   ctx.arc(x, y + 1, CELL_SIZE * .31, 0, Math.PI * 2);
   ctx.fill();
   ctx.shadowBlur = 0;
-  ctx.strokeStyle = "#b6f25d";
+  ctx.strokeStyle = "#58a6ff";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(x, y - 7);
