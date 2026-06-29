@@ -29,6 +29,21 @@
       </div>
     </section>
 
+    <fieldset class="difficulty-picker">
+      <legend>难度等级</legend>
+      <div class="difficulty-options">
+        <button class="difficulty-button" data-difficulty="easy" type="button" aria-pressed="false">
+          <strong>简单</strong><span>慢速</span>
+        </button>
+        <button class="difficulty-button active" data-difficulty="normal" type="button" aria-pressed="true">
+          <strong>普通</strong><span>标准</span>
+        </button>
+        <button class="difficulty-button" data-difficulty="hard" type="button" aria-pressed="false">
+          <strong>困难</strong><span>快速</span>
+        </button>
+      </div>
+    </fieldset>
+
     <section class="board-wrap">
       <canvas id="gameCanvas" width="480" height="480" aria-label="贪吃蛇游戏区域"></canvas>
       <div id="gameOverlay" class="overlay">

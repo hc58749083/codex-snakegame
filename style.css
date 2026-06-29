@@ -101,6 +101,48 @@ h1 {
 .score-item strong { color: var(--lime); font-size: 23px; letter-spacing: .08em; }
 .score-divider { width: 1px; height: 34px; background: var(--line); }
 
+.difficulty-picker {
+  min-width: 0;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.difficulty-picker legend {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.difficulty-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.difficulty-button {
+  display: grid;
+  gap: 3px;
+  padding: 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--panel-2);
+  cursor: pointer;
+  transition: border-color .12s ease, background .12s ease, transform .12s ease;
+}
+
+.difficulty-button strong { font-size: 13px; }
+.difficulty-button span { color: var(--muted); font-size: 10px; }
+.difficulty-button:hover { border-color: var(--lime-dark); }
+.difficulty-button:active { transform: translateY(2px); }
+.difficulty-button.active {
+  border-color: var(--lime);
+  color: #18210f;
+  background: var(--lime);
+}
+.difficulty-button.active span { color: #415421; }
+
 .board-wrap {
   position: relative;
   overflow: hidden;

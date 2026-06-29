@@ -12,11 +12,15 @@ const startButton = document.querySelector("#startButton");
 const pauseButton = document.querySelector("#pauseButton");
 const restartButton = document.querySelector("#restartButton");
 const soundButton = document.querySelector("#soundButton");
+const difficultyButtons = document.querySelectorAll("[data-difficulty]");
 
 const GRID_SIZE = 20;
 const CELL_SIZE = canvas.width / GRID_SIZE;
-const INITIAL_SPEED = 150;
-const MIN_SPEED = 70;
+const DIFFICULTIES = {
+  easy: { label: "简单", initialSpeed: 190, minSpeed: 100, speedStep: 8 },
+  normal: { label: "普通", initialSpeed: 150, minSpeed: 70, speedStep: 10 },
+  hard: { label: "困难", initialSpeed: 105, minSpeed: 50, speedStep: 10 },
+};
 const DIRECTIONS = {
   up: { x: 0, y: -1 },
   down: { x: 0, y: 1 },
@@ -34,6 +38,9 @@ let state = "ready";
 let soundEnabled = true;
 let audioContext = null;
 let bestScore = Number(localStorage.getItem("snake-best-score")) || 0;
+let difficulty = localStorage.getItem("snake-difficulty");
+
+if (!DIFFICULTIES[difficulty]) difficulty = "normal";
 
 function formatScore(value) {
   return String(value).padStart(3, "0");
@@ -54,7 +61,12 @@ function resetGame() {
   updateScore();
   pauseButton.disabled = true;
   pauseButton.textContent = "暂停";
-  showOverlay("准备好了吗？", "开始游戏", "吃掉果实，别撞到墙壁或自己。", "开始");
+  showOverlay(
+    `${DIFFICULTIES[difficulty].label}模式`,
+    "开始游戏",
+    "吃掉果实，别撞到墙壁或自己。",
+    "开始",
+  );
   draw();
 }
 
@@ -91,8 +103,28 @@ function resumeGame() {
 
 function scheduleTick() {
   clearTimeout(timer);
-  const speed = Math.max(MIN_SPEED, INITIAL_SPEED - Math.floor(score / 5) * 10);
+  const settings = DIFFICULTIES[difficulty];
+  const speed = Math.max(
+    settings.minSpeed,
+    settings.initialSpeed - Math.floor(score / 5) * settings.speedStep,
+  );
   timer = setTimeout(tick, speed);
+}
+
+function selectDifficulty(name) {
+  if (!DIFFICULTIES[name] || name === difficulty) return;
+  difficulty = name;
+  localStorage.setItem("snake-difficulty", difficulty);
+  updateDifficultyButtons();
+  resetGame();
+}
+
+function updateDifficultyButtons() {
+  difficultyButtons.forEach((button) => {
+    const isActive = button.dataset.difficulty === difficulty;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
 }
 
 function tick() {
@@ -298,6 +330,10 @@ document.querySelectorAll("[data-direction]").forEach((button) => {
   button.addEventListener("pointerdown", () => setDirection(button.dataset.direction));
 });
 
+difficultyButtons.forEach((button) => {
+  button.addEventListener("click", () => selectDifficulty(button.dataset.difficulty));
+});
+
 startButton.addEventListener("click", startGame);
 pauseButton.addEventListener("click", togglePause);
 restartButton.addEventListener("click", () => {
@@ -312,4 +348,5 @@ soundButton.addEventListener("click", () => {
 });
 
 bestScoreElement.textContent = formatScore(bestScore);
+updateDifficultyButtons();
 resetGame();
